@@ -32,6 +32,7 @@ class DeeplTranslator(BaseTranslator):
         target: str = "en",
         api_key: Optional[str] = os.getenv(DEEPL_ENV_VAR, None),
         use_free_api: bool = True,
+        proxies: Optional[dict] = None,
         **kwargs
     ):
         """
@@ -45,6 +46,7 @@ class DeeplTranslator(BaseTranslator):
 
         self.version = "v2"
         self.api_key = api_key
+        self.proxies = proxies
         url = (
             BASE_URLS.get("DEEPL_FREE").format(version=self.version)
             if use_free_api

@@ -54,7 +54,20 @@ class GoogleTranslator(BaseTranslator):
         @param text: desired text to translate
         @return: str: translated text
         """
-        # test
+        if kwargs:
+            # kwargs不为空
+            if kwargs['glossary']:
+                if isinstance(kwargs['glossary'], dict):  # 如果是字典
+                    for key, value in kwargs['glossary'].items():
+                        if key.lower() in text.lower():
+                            if len(text) == len(key):  # 如果是单词匹配，则不用翻译了
+                                return value
+                            else:  # 如果是词组或句子中的一个，则复杂了
+                                text = text.replace(key, value)  # 这里区分大小写，是一个不错的方法
+                                # 再去翻译，如果已翻成目标语言，则翻译器忽视。如果还是源语言，则目前没有办法。
+
+        if text.isdigit():
+            return text
         if is_input_valid(text, max_chars=5000):
             text = text.strip()
             if self._same_source_target() or is_empty(text):
